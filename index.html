@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Serenne Margin Calculator</title>
+<title>Serenne Price Calculator</title>
 
 <style>
 body {
@@ -13,7 +13,7 @@ body {
 }
 
 .container {
-  max-width: 600px;
+  max-width: 650px;
   margin: auto;
   background: white;
   padding: 30px;
@@ -37,6 +37,7 @@ input {
   margin-bottom: 15px;
   border: 1px solid #ddd;
   border-radius: 10px;
+  box-sizing: border-box;
 }
 
 button {
@@ -52,9 +53,18 @@ button {
 
 .result {
   margin-top: 20px;
-  padding: 20px;
+}
+
+.card {
   background: #f3f0ff;
-  border-radius: 10px;
+  padding: 18px;
+  margin-top: 12px;
+  border-radius: 12px;
+}
+
+.card h3 {
+  margin-top: 0;
+  color: #7d5fff;
 }
 </style>
 </head>
@@ -62,7 +72,7 @@ button {
 <body>
 <div class="container">
 
-<h1>💜 Serenne Margin Calculator</h1>
+<h1>💜 Serenne Price Calculator</h1>
 
 <label>사입가</label>
 <input type="number" id="cost" placeholder="예: 18000">
@@ -76,7 +86,7 @@ button {
 <label>플랫폼 수수료 (%)</label>
 <input type="number" id="fee" placeholder="예: 5">
 
-<button onclick="calculate()">1.6배 판매가로 마진 계산하기</button>
+<button onclick="calculate()">권장 판매가 비교하기</button>
 
 <div class="result" id="result">
 결과가 여기에 표시됩니다.
@@ -91,17 +101,31 @@ function calculate() {
   const pack = Number(document.getElementById('package').value);
   const fee = Number(document.getElementById('fee').value);
 
-  const price = Math.round(cost * 1.6);
-  const feeAmount = price * (fee / 100);
-  const profit = price - cost - delivery - pack - feeAmount;
-  const margin = price > 0 ? ((profit / price) * 100).toFixed(1) : 0;
+  if (cost <= 0) {
+    document.getElementById('result').innerHTML = "사입가를 입력해 주세요.";
+    return;
+  }
 
-  document.getElementById('result').innerHTML = `
-    <h3>계산 결과</h3>
-    <p>추천 판매가: ${price.toLocaleString()}원</p>
-    <p>순이익: ${profit.toLocaleString()}원</p>
-    <p>마진율: ${margin}%</p>
-  `;
+  const rates = [1.6, 1.8, 2.0];
+  let resultHTML = "<h2>계산 결과</h2>";
+
+  rates.forEach(rate => {
+    const price = Math.round(cost * rate);
+    const feeAmount = price * (fee / 100);
+    const profit = price - cost - delivery - pack - feeAmount;
+    const margin = price > 0 ? ((profit / price) * 100).toFixed(1) : 0;
+
+    resultHTML += `
+      <div class="card">
+        <h3>${rate}배 판매가</h3>
+        <p>권장 판매가: ${price.toLocaleString()}원</p>
+        <p>순이익: ${profit.toLocaleString()}원</p>
+        <p>마진율: ${margin}%</p>
+      </div>
+    `;
+  });
+
+  document.getElementById('result').innerHTML = resultHTML;
 }
 </script>
 
