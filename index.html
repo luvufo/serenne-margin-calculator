@@ -6,82 +6,77 @@
 <title>Serenne Margin Calculator</title>
 
 <style>
-body{
-    font-family: Arial, sans-serif;
-    background:#f8f5ff;
-    padding:40px;
+body {
+  font-family: Arial, sans-serif;
+  background: #f8f5ff;
+  padding: 40px;
 }
 
-.container{
-    max-width:600px;
-    margin:auto;
-    background:white;
-    padding:30px;
-    border-radius:20px;
-    box-shadow:0 0 20px rgba(0,0,0,0.1);
+.container {
+  max-width: 600px;
+  margin: auto;
+  background: white;
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.1);
 }
 
-h1{
-    text-align:center;
-    color:#7d5fff;
+h1 {
+  text-align: center;
+  color: #7d5fff;
 }
 
-input{
-    width:100%;
-    padding:12px;
-    margin-top:8px;
-    margin-bottom:15px;
-    border:1px solid #ddd;
-    border-radius:10px;
+label {
+  font-weight: bold;
 }
 
-button{
-    width:100%;
-    padding:15px;
-    border:none;
-    border-radius:10px;
-    background:#a78bfa;
-    color:white;
-    font-size:16px;
-    cursor:pointer;
+input {
+  width: 100%;
+  padding: 12px;
+  margin-top: 8px;
+  margin-bottom: 15px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
 }
 
-button:hover{
-    opacity:0.9;
+button {
+  width: 100%;
+  padding: 15px;
+  border: none;
+  border-radius: 10px;
+  background: #a78bfa;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
 }
 
-.result{
-    margin-top:20px;
-    padding:20px;
-    background:#f3f0ff;
-    border-radius:10px;
+.result {
+  margin-top: 20px;
+  padding: 20px;
+  background: #f3f0ff;
+  border-radius: 10px;
 }
 </style>
-
 </head>
-<body>
 
+<body>
 <div class="container">
 
 <h1>💜 Serenne Margin Calculator</h1>
 
 <label>사입가</label>
-<input type="number" id="cost">
+<input type="number" id="cost" placeholder="예: 18000">
 
-<label>판매가</label>
-<input type="number" id="price">
-<button onclick="setRecommendedPrice()">1.6배 추천 판매가 적용</button>
-    
 <label>택배비</label>
-<input type="number" id="delivery">
+<input type="number" id="delivery" placeholder="예: 3500">
 
 <label>포장비</label>
-<input type="number" id="package">
+<input type="number" id="package" placeholder="예: 500">
 
-<label>수수료 (%)</label>
-<input type="number" id="fee">
+<label>플랫폼 수수료 (%)</label>
+<input type="number" id="fee" placeholder="예: 5">
 
-<button onclick="calculate()">마진 계산하기</button>
+<button onclick="calculate()">1.6배 판매가로 마진 계산하기</button>
 
 <div class="result" id="result">
 결과가 여기에 표시됩니다.
@@ -90,31 +85,23 @@ button:hover{
 </div>
 
 <script>
-function setRecommendedPrice(){
+function calculate() {
   const cost = Number(document.getElementById('cost').value);
-  const recommendedPrice = Math.round(cost * 1.6);
-  document.getElementById('price').value = recommendedPrice;
-}
+  const delivery = Number(document.getElementById('delivery').value);
+  const pack = Number(document.getElementById('package').value);
+  const fee = Number(document.getElementById('fee').value);
 
-function calculate(){
+  const price = Math.round(cost * 1.6);
+  const feeAmount = price * (fee / 100);
+  const profit = price - cost - delivery - pack - feeAmount;
+  const margin = price > 0 ? ((profit / price) * 100).toFixed(1) : 0;
 
-const cost = Number(document.getElementById('cost').value);
-const price = Number(document.getElementById('price').value);
-const delivery = Number(document.getElementById('delivery').value);
-const pack = Number(document.getElementById('package').value);
-const fee = Number(document.getElementById('fee').value);
-
-const feeAmount = price * (fee / 100);
-const profit = price - cost - delivery - pack - feeAmount;
-const margin = price > 0 ? ((profit / price) * 100).toFixed(1) : 0;
-
-document.getElementById('result').innerHTML =
-`
-<h3>계산 결과</h3>
-<p>추천 판매가 1.6배 : ${(cost * 1.6).toLocaleString()} 원</p>
-<p>순이익 : ${profit.toLocaleString()} 원</p>
-<p>마진율 : ${margin}%</p>
-`;
+  document.getElementById('result').innerHTML = `
+    <h3>계산 결과</h3>
+    <p>추천 판매가: ${price.toLocaleString()}원</p>
+    <p>순이익: ${profit.toLocaleString()}원</p>
+    <p>마진율: ${margin}%</p>
+  `;
 }
 </script>
 
