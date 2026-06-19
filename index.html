@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Serenne Margin Calculator</title>
+
+<style>
+body{
+    font-family: Arial, sans-serif;
+    background:#f8f5ff;
+    padding:40px;
+}
+
+.container{
+    max-width:600px;
+    margin:auto;
+    background:white;
+    padding:30px;
+    border-radius:20px;
+    box-shadow:0 0 20px rgba(0,0,0,0.1);
+}
+
+h1{
+    text-align:center;
+    color:#7d5fff;
+}
+
+input{
+    width:100%;
+    padding:12px;
+    margin-top:8px;
+    margin-bottom:15px;
+    border:1px solid #ddd;
+    border-radius:10px;
+}
+
+button{
+    width:100%;
+    padding:15px;
+    border:none;
+    border-radius:10px;
+    background:#a78bfa;
+    color:white;
+    font-size:16px;
+    cursor:pointer;
+}
+
+button:hover{
+    opacity:0.9;
+}
+
+.result{
+    margin-top:20px;
+    padding:20px;
+    background:#f3f0ff;
+    border-radius:10px;
+}
+</style>
+
+</head>
+<body>
+
+<div class="container">
+
+<h1>💜 Serenne Margin Calculator</h1>
+
+<label>사입가</label>
+<input type="number" id="cost">
+
+<label>판매가</label>
+<input type="number" id="price">
+
+<label>택배비</label>
+<input type="number" id="delivery">
+
+<label>포장비</label>
+<input type="number" id="package">
+
+<label>수수료 (%)</label>
+<input type="number" id="fee">
+
+<button onclick="calculate()">마진 계산하기</button>
+
+<div class="result" id="result">
+결과가 여기에 표시됩니다.
+</div>
+
+</div>
+
+<script>
+function calculate(){
+
+const cost = Number(document.getElementById('cost').value);
+const price = Number(document.getElementById('price').value);
+const delivery = Number(document.getElementById('delivery').value);
+const pack = Number(document.getElementById('package').value);
+const fee = Number(document.getElementById('fee').value);
+
+const feeAmount = price * (fee / 100);
+
+const profit =
+price - cost - delivery - pack - feeAmount;
+
+const margin =
+(price > 0)
+? ((profit / price) * 100).toFixed(1)
+: 0;
+
+document.getElementById('result').innerHTML =
+`
+<h3>계산 결과</h3>
+<p>순이익 : ${profit.toLocaleString()} 원</p>
+<p>마진율 : ${margin}%</p>
+`;
+}
+</script>
+
+</body>
+</html>
