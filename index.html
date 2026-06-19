@@ -89,6 +89,12 @@ button:hover{
 </div>
 
 <script>
+function setRecommendedPrice(){
+  const cost = Number(document.getElementById('cost').value);
+  const recommendedPrice = Math.round(cost * 1.6);
+  document.getElementById('price').value = recommendedPrice;
+}
+
 function calculate(){
 
 const cost = Number(document.getElementById('cost').value);
@@ -98,18 +104,13 @@ const pack = Number(document.getElementById('package').value);
 const fee = Number(document.getElementById('fee').value);
 
 const feeAmount = price * (fee / 100);
-
-const profit =
-price - cost - delivery - pack - feeAmount;
-
-const margin =
-(price > 0)
-? ((profit / price) * 100).toFixed(1)
-: 0;
+const profit = price - cost - delivery - pack - feeAmount;
+const margin = price > 0 ? ((profit / price) * 100).toFixed(1) : 0;
 
 document.getElementById('result').innerHTML =
 `
 <h3>계산 결과</h3>
+<p>추천 판매가 1.6배 : ${(cost * 1.6).toLocaleString()} 원</p>
 <p>순이익 : ${profit.toLocaleString()} 원</p>
 <p>마진율 : ${margin}%</p>
 `;
